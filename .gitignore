@@ -1,0 +1,81 @@
+# =========================
+# PYTHON
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribuição / build
+build/
+dist/
+*.egg-info/
+*.egg
+
+# Logs
+*.log
+
+# Test / coverage
+.coverage
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+
+# =========================
+# VENV
+# =========================
+venv/
+.env/
+.env.*
+
+# =========================
+# IDEs
+# =========================
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# =========================
+# SISTEMA OPERACIONAL
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# PYINSTALLER
+# =========================
+*.spec
+*.exe
+*.dll
+*.pyd
+
+# =========================
+# QT / PYSIDE
+# =========================
+*.ui.py
+*.qrc.py
+
+# =========================
+# ARQUIVOS TEMP
+# =========================
+*.tmp
+*.bak
+*.swp
+
+# =========================
+# BANCO LOCAL (opcional)
+# =========================
+*.sqlite3
+*.db
+
+# =========================
+# CONFIG SENSÍVEL
+# =========================
+.env
+.env.local
+
+# =========================
+# CACHE
+# =========================
+.cache/
