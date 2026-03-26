@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QMainWindow
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile
 
-from utils.paths import resources_path
+from views.create_window_view import CreateWindow
 
 from utils.paths import ui_path
 
@@ -30,5 +30,10 @@ class MainWindow(QMainWindow):
     
 
     def setup_connections(self):
-        pass
+        self.ui.btn_create.clicked.connect(self.create_window)
+
+    def create_window(self):
+        
+        dialog = CreateWindow()
+        dialog.exec()
 
