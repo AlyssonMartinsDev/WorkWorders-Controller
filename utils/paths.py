@@ -10,9 +10,9 @@ def base_path() -> Path:
     return Path(__file__).resolve().parent.parent
 
 
-def resources_path(*path) -> Path:
+def resource_path(*path) -> Path:
     return base_path().joinpath(*path)
 
 
 def ui_path(file_name: str) -> Path:
-    return resources_path("ui", file_name)
+    return resource_path("ui", file_name)
