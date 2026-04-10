@@ -1,17 +1,39 @@
-from sqlalchemy import Column, Integer, String, Text, null
+from sqlalchemy import Column, Integer, String, Text, null, ForeignKey, DateTime, Float
+from datetime import datetime, UTC
+from sqlalchemy.orm import relationship
 
 from data.database import Base
 
 
-class WorkOrder(Base):
+class WorkOrderModel(Base):
     __tablename__ = "work_orders"
 
     id= Column(Integer, primary_key=True, autoincrement=True)
-    client_name= Column[str](String, nullable=False)
-    phone= Column[str](String, nullable=False)
-    access_remote= Column[str](String, nullable=False)
-    description= Column[str](Text, nullable=False)
-    date= Column[str](String, nullable=False)
-    status_service = Column[str](String, nullable=False)
-    price = Column[str](String, nullable=False)
-    status_payment = Column[str](String, nullable=False)
+
+    client_id = Column(Integer, ForeignKey("clients.id"), nullable=False)
+
+    remote_access_id = Column(Integer, ForeignKey("remote_access.id"), nullable=True)
+
+    description= Column(Text, nullable=False)
+
+    status_service_id = Column(Integer, ForeignKey("status_services.id"), nullable=False, default=1)
+
+    price = Column(Float, nullable=False)
+
+    status_payment_id = Column(Integer, ForeignKey("status_payments.id"), nullable=False, default=1)
+
+    created_at = Column(
+        DateTime(timezone=True),
+        default= lambda: datetime.now(UTC)
+    )
+    updated_at = Column(
+        DateTime(timezone=True),
+        default= lambda: datetime.now(UTC),
+        onupdate= lambda: datetime.now(UTC)
+    )
+
+
+    client = relationship("ClientsModel", back_populates="work_orders")
+    remote_access = relationship("RemoteAccess", back_populates="work_orders")
+    status_service = relationship("StatusServiceModel", back_populates="work_orders")
+    status_payment = relationship("StatusPaymentModel", back_populates="work_orders")

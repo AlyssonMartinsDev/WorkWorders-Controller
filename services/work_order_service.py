@@ -1,5 +1,6 @@
 from data.database import SessionLocal
-from models.work_orders import WorkOrder
+from models.work_orders import WorkOrderModel
+from sqlalchemy.orm import joinedload
 
 
 class WorkOrderService:
@@ -16,7 +17,7 @@ class WorkOrderService:
         try:
 
 
-            work_order = WorkOrder(
+            work_order = WorkOrderModel(
                 client_name=data["name"],
                 phone=data["phone"],
                 access_remote=data["idAccessRemote"],
@@ -39,16 +40,26 @@ class WorkOrderService:
         finally:
             session.close()
 
-    def get_all_work_orders(self):
 
+
+    def get_all_work_orders(self):
         session = SessionLocal()
 
         try:
-            work_order = session.query(WorkOrder).all()
-            return work_order
+            work_orders = session.query(WorkOrderModel)\
+                .options(
+                    joinedload(WorkOrderModel.client),
+                    joinedload(WorkOrderModel.status_service),
+                    joinedload(WorkOrderModel.status_payment),
+                    joinedload(WorkOrderModel.remote_access)
+                )\
+                .all()
+
+            return work_orders
 
         except Exception as e:
-            return e
+            print(e)
+            return []
         finally:
             session.close()
 

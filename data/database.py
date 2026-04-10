@@ -1,33 +1,34 @@
-from sqlalchemy.orm.session import Session
-
-
-from pathlib import Path
-
+# sqlAlchemy imports
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
 
-from utils.paths import resource_path
+# variaveis de ambiente
+import os
+from dotenv import load_dotenv
+load_dotenv() #carrega as variaveis de ambiente
 
-DATABASE_NAME = "app.db"
+# Variaveis
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_NAME = os.getenv("DB_NAME")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
 
-DATABASE_PATH = resource_path("data", DATABASE_NAME)
-DATABASE_PATH.parent.mkdir(parents=True, exist_ok=True)
-
-DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
+DATABASE_URL = f"postgresql+psycopg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 
 
-
+# criando a endine
 engine = create_engine(
     DATABASE_URL,
-    echo=False,
-    connect_args={"check_same_thread": False}
-
+    echo=False
 )
 
+#criando a sessao
 SessionLocal = sessionmaker(
     autocommit=False,
     autoflush=False,
     bind=engine
 )
 
+#criando o base
 Base = declarative_base()

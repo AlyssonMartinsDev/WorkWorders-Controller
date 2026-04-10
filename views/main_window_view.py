@@ -1,3 +1,4 @@
+from typing import Self
 from PySide6.QtWidgets import QMainWindow, QHeaderView
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt
@@ -36,7 +37,11 @@ class MainWindow(QMainWindow):
         file.close()
 
         self.setCentralWidget(self.ui)
+
+
     def load_work_orders(self):
+
+        
         work_orders = self.service.get_all_work_orders()
 
 
@@ -57,24 +62,27 @@ class MainWindow(QMainWindow):
         for order in work_orders:
             row_items = [
                 QStandardItem(str(order.id)),
-                QStandardItem(str(order.client_name)),
-                QStandardItem(str(order.phone)),
-                QStandardItem(str(order.access_remote)),
+                QStandardItem(str(order.client.name)),
+                QStandardItem(str(order.client.phone)),
+                QStandardItem(str(order.remote_access.code if order.remote_access else "")),
                 QStandardItem(str(order.description)),
-                QStandardItem(str(order.date)),
-                QStandardItem(str(order.status_service)),  # 👈 índice 6
+                QStandardItem(str(order.created_at.date())),  # ou formatar depois
+                QStandardItem(str(order.status_service.name)),  # 👈 índice 6
                 QStandardItem(format_currency(order.price)),
-                QStandardItem(str(order.status_payment))
+                QStandardItem(str(order.status_payment.name))
             ]
-
-            status = order.status_service.strip().upper()
+            status = order.status_service.name.strip().upper()
 
             if status == "FINALIZADO":
                 color = QColor("#C8E6C9")  # verde
             elif status == "EM ANDAMENTO":
                 color = QColor("#B3E5FC")  # azul claro
-            elif status == "REJEITADA":
-                color = QColor("#BBDEFB")  # azul
+            elif status == "ATRASADO":
+                color = QColor("#D3D3D3") # cinza claro
+            elif status == "AGUARDANDO CLIENTE":
+                color = QColor("#FFF9C4")
+            elif status == "REJEITADO":
+                color = QColor("#FF7081")   
             else:
                 color = None
 
@@ -84,12 +92,15 @@ class MainWindow(QMainWindow):
                 status_item.setBackground(color)
                 status_item.setForeground(QColor("black"))  # texto preto
 
-            status_payment = order.status_payment.strip().upper()
+            status_payment = order.status_payment.name.strip().upper()
 
             if status_payment == "PAGO":
                 color = QColor("#C8E6C9")  # verde
             elif status_payment == "PENDENTE":
                 color = QColor("#FFF9C4")  # amarelo claro
+            elif status_payment == "DEVENDO":
+                color = QColor("#FF7081") 
+
             else:
                 color = None
 
