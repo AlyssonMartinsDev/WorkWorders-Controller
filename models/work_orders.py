@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Text, null, ForeignKey, DateTime, Float
+from sqlalchemy import Column, Integer, Numeric, Text, ForeignKey, DateTime, text
 from datetime import datetime, UTC
 from sqlalchemy.orm import relationship
 
@@ -18,7 +18,7 @@ class WorkOrderModel(Base):
 
     status_service_id = Column(Integer, ForeignKey("status_services.id"), nullable=False, default=1)
 
-    price = Column(Float, nullable=False)
+    price = Column(Numeric(10,2), nullable=False, default=0.00, server_default=text("0.00"))
 
     status_payment_id = Column(Integer, ForeignKey("status_payments.id"), nullable=False, default=1)
 

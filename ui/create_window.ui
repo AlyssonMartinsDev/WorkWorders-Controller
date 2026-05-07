@@ -25,8 +25,8 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
     <widget class="QFrame" name="frame">
      <property name="frameShape">
       <enum>QFrame::Shape::StyledPanel</enum>
@@ -34,52 +34,30 @@
      <property name="frameShadow">
       <enum>QFrame::Shadow::Raised</enum>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QFrame" name="frame_4">
+     <layout class="QGridLayout" name="gridLayout" rowstretch="0,0" columnstretch="1,0,0">
+      <item row="1" column="0" colspan="2">
+       <widget class="QFrame" name="frame_12">
         <property name="frameShape">
          <enum>QFrame::Shape::StyledPanel</enum>
         </property>
         <property name="frameShadow">
          <enum>QFrame::Shadow::Raised</enum>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
          <item>
-          <widget class="QFrame" name="frame_6">
-           <property name="frameShape">
-            <enum>QFrame::Shape::StyledPanel</enum>
-           </property>
-           <property name="frameShadow">
-            <enum>QFrame::Shadow::Raised</enum>
-           </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_4">
-            <item>
-             <widget class="QLabel" name="label_3">
-              <property name="text">
-               <string>ID ACESSO REMOTO</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLineEdit" name="lineEdit_idAccessRemote"/>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QLabel" name="label">
+          <widget class="QLabel" name="label_10">
            <property name="text">
-            <string>NOME: </string>
+            <string>NOTAS: </string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lineEdit_name"/>
+          <widget class="QLineEdit" name="lineEdit_notes"/>
          </item>
         </layout>
        </widget>
       </item>
-      <item>
+      <item row="0" column="1">
        <widget class="QFrame" name="frame_5">
         <property name="frameShape">
          <enum>QFrame::Shape::StyledPanel</enum>
@@ -91,7 +69,7 @@
          <item>
           <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>CONTATO: </string>
+            <string>CONTATO: * </string>
            </property>
           </widget>
          </item>
@@ -101,10 +79,144 @@
         </layout>
        </widget>
       </item>
+      <item row="0" column="2">
+       <widget class="QFrame" name="frame_13">
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="label_9">
+           <property name="text">
+            <string>EMAIL:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_email"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="2">
+       <widget class="QFrame" name="frame_6">
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEdit_type"/>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="lineEdit_code"/>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="lineEdit_password"/>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>SENHA: </string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_3">
+           <property name="text">
+            <string>TIPO:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_11">
+           <property name="text">
+            <string>CÓDIGO ACESSO:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0" colspan="2">
+          <widget class="QLabel" name="label_12">
+           <property name="text">
+            <string>ACESSO REMOTO</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QFrame" name="frame_4">
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>NOME:* </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLineEdit" name="lineEdit_name"/>
+         </item>
+         <item>
+          <widget class="QFrame" name="frame_8">
+           <property name="frameShape">
+            <enum>QFrame::Shape::StyledPanel</enum>
+           </property>
+           <property name="frameShadow">
+            <enum>QFrame::Shadow::Raised</enum>
+           </property>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <property name="leftMargin">
+             <number>0</number>
+            </property>
+            <property name="topMargin">
+             <number>0</number>
+            </property>
+            <property name="rightMargin">
+             <number>0</number>
+            </property>
+            <property name="bottomMargin">
+             <number>0</number>
+            </property>
+            <item>
+             <widget class="QPushButton" name="lookupButton">
+              <property name="text">
+               <string>ESCOLHER</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="button_clear">
+              <property name="text">
+               <string>LIMPAR</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0">
     <widget class="QFrame" name="frame_2">
      <property name="maximumSize">
       <size>
@@ -132,7 +244,7 @@
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="2" column="0">
     <widget class="QFrame" name="frame_3">
      <property name="frameShape">
       <enum>QFrame::Shape::StyledPanel</enum>
@@ -140,87 +252,7 @@
      <property name="frameShadow">
       <enum>QFrame::Shadow::Raised</enum>
      </property>
-     <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1,0,1,0">
-      <item alignment="Qt::AlignmentFlag::AlignHCenter">
-       <widget class="QFrame" name="frame_8">
-        <property name="frameShape">
-         <enum>QFrame::Shape::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Shadow::Raised</enum>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_6">
-         <item>
-          <widget class="QLabel" name="label_5">
-           <property name="text">
-            <string>DATA: </string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QDateEdit" name="dateEdit">
-           <property name="minimumSize">
-            <size>
-             <width>87</width>
-             <height>21</height>
-            </size>
-           </property>
-           <property name="timeSpec">
-            <enum>Qt::TimeSpec::LocalTime</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QFrame" name="frame_7">
-        <property name="frameShape">
-         <enum>QFrame::Shape::StyledPanel</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Shadow::Raised</enum>
-        </property>
-        <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,1">
-         <item alignment="Qt::AlignmentFlag::AlignVCenter">
-          <widget class="QLabel" name="label_8">
-           <property name="text">
-            <string>STATUS SERVIÇO: </string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="comboBox_statusService">
-           <item>
-            <property name="text">
-             <string>EM ANDAMENTO</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>FINALIZADO</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>AGUARDANDO FORMATAÇÃO</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>AGUARDADNO APROVAÇÃO</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>REJEITADO</string>
-            </property>
-           </item>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
+     <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1,1,0">
       <item>
        <widget class="QFrame" name="frame_10">
         <property name="frameShape">
@@ -251,6 +283,28 @@
        </widget>
       </item>
       <item>
+       <widget class="QFrame" name="frame_7">
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,1">
+         <item alignment="Qt::AlignmentFlag::AlignVCenter">
+          <widget class="QLabel" name="label_8">
+           <property name="text">
+            <string>STATUS SERVIÇO: </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="comboBox_statusService"/>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item>
        <widget class="QFrame" name="frame_9">
         <property name="frameShape">
          <enum>QFrame::Shape::StyledPanel</enum>
@@ -267,18 +321,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox_statusPayment">
-           <item>
-            <property name="text">
-             <string>AGUARDANDO PAGAMENTO</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>PAGO</string>
-            </property>
-           </item>
-          </widget>
+          <widget class="QComboBox" name="comboBox_statusPayment"/>
          </item>
         </layout>
        </widget>
@@ -307,6 +350,22 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_name</tabstop>
+  <tabstop>lineEdit_phone</tabstop>
+  <tabstop>lineEdit_email</tabstop>
+  <tabstop>lineEdit_notes</tabstop>
+  <tabstop>lineEdit_type</tabstop>
+  <tabstop>lineEdit_code</tabstop>
+  <tabstop>lineEdit_password</tabstop>
+  <tabstop>textEdit</tabstop>
+  <tabstop>lineEdit_price</tabstop>
+  <tabstop>comboBox_statusService</tabstop>
+  <tabstop>comboBox_statusPayment</tabstop>
+  <tabstop>btn_create</tabstop>
+  <tabstop>lookupButton</tabstop>
+  <tabstop>button_clear</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
