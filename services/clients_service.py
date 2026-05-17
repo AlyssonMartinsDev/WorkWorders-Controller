@@ -78,9 +78,6 @@ class ClientsService:
         finally:
             if own_session:
                 session.close()           
-                
-
-
 
     def get_all_clients(self):
 
@@ -98,8 +95,6 @@ class ClientsService:
         finally:
             session.close()
 
-            
-    
     def get_client_by_id(self, id):
         session = SessionLocal()
 
