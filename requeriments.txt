@@ -1,4 +1,13 @@
+dnspython==2.8.0
+email-validator==2.3.0
+greenlet==3.3.2
+idna==3.11
+psycopg==3.3.3
+psycopg-binary==3.3.3
 PySide6==6.11.0
 PySide6_Addons==6.11.0
 PySide6_Essentials==6.11.0
+python-dotenv==1.2.2
 shiboken6==6.11.0
+SQLAlchemy==2.0.48
+typing_extensions==4.15.0
