@@ -2,6 +2,7 @@ from PySide6.QtCore import QFile, Qt, Signal
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import QMessageBox, QWidget, QVBoxLayout
 
+from services import work_order_service
 from services.clients_service import ClientsService
 from services.status_payment_service import StatusServiceService
 from services.status_service_service import StatusPaymentService
@@ -11,11 +12,16 @@ from views.lookup_window_view import LookupWindowDialog
 
 
 class CreateWorkOrderView(QWidget):
+    work_order_created = Signal(dict) 
+
+
     def __init__(self):
         super().__init__()
 
-        work_order_created = Signal()
+        
         self.load_ui()
+
+        self.selected_id = None
         
 
         # Services
@@ -168,11 +174,41 @@ class CreateWorkOrderView(QWidget):
         try:
             message = self.work_order_service.create_work_order(data)
 
-            QMessageBox.information(self,"Sucesso", message)
+            result = QMessageBox.question(self,"Sucesso", f"{message}\nDeseja cadastrar outra?", QMessageBox.Yes | QMessageBox.No)
+
+            if result == QMessageBox.No:
+                self.work_order_created.emit({
+                    "go_to_dashboard": True,
+                    "reload_dashboard": True
+                })
+                self.clear_all_fields()
+                return
+            self.work_order_created.emit({
+                    "go_to_dashboard": False,
+                    "reload_dashboard": True
+                })
+            self.clear_all_fields()
 
         except Exception as e:
             QMessageBox.critical(self, "Erro", f"{e}")
 
 
+    def clear_all_fields(self):
 
-        
+        self.clear_fields()
+
+        self.ui.lineEdit_type.clear()
+        self.ui.lineEdit_code.clear()
+        self.ui.lineEdit_password.clear()
+        self.ui.lineEdit_price.clear()
+        self.ui.textEdit.clear()
+
+
+
+
+
+
+
+
+
+

@@ -57,6 +57,11 @@ class MainWindow(QMainWindow):
         self.dashboard_page = DashboardView()
         self.create_work_order_page = CreateWorkOrderView()
 
+        # Sinais
+        self.create_work_order_page.work_order_created.connect(
+            self.on_work_order_created
+        )
+
         self.ui.stackedWidget.addWidget(self.dashboard_page)
         self.ui.stackedWidget.addWidget(self.create_client_page)
         self.ui.stackedWidget.addWidget(self.create_work_order_page)
@@ -72,13 +77,7 @@ class MainWindow(QMainWindow):
         self.ui.action_create_work_order.triggered.connect(self.open_create_work_order_page)
 
 
-    def create_window(self):
-        
-        dialog = CreateWindow()
-        if dialog.exec():
-            self.load_pending_orders()
-            self.load_finished_orders()
-
+    
     def center_window(self):
         frame = self.frameGeometry()
         screen = self.screen().availableGeometry().center()
@@ -97,3 +96,17 @@ class MainWindow(QMainWindow):
 
     def go_to_home(self):
         self.ui.stackedWidget.setCurrentWidget(self.dashboard_page)
+
+    def on_work_order_created(self, data):
+        if data.get("reload_dashboard"):
+            self.dashboard_page.load_pending_orders()
+            self.dashboard_page.load_finished_orders()
+
+        if data.get("go_to_dashboard"):
+            self.ui.stackedWidget.setCurrentWidget(self.dashboard_page)
+
+
+
+
+
+
