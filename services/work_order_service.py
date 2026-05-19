@@ -89,10 +89,51 @@ class WorkOrderService:
             return work_orders
 
         except Exception as e:
-            print(e)
+            
             return []
         finally:
             session.close()
+
+    def update_status_service(self, work_orer_id, status_service_id):
+        session = SessionLocal()
+
+        try:
+            work_order = session.query(WorkOrderModel).filter(WorkOrderModel.id == work_orer_id).first()
+
+            if not work_order:
+                raise ValueError("Ordem de serviço não encontrada")
+
+            work_order.status_service_id = status_service_id
+
+            session.commit()
+
+            return "Status de serviço atualizado com sucesso"
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
+
+    def update_status_payment(self, work_orer_id, status_payment_id):
+        session = SessionLocal()
+
+        try:
+            work_order = session.query(WorkOrderModel).filter(WorkOrderModel.id == work_orer_id).first()
+
+            if not work_order:
+                raise ValueError("Ordem de serviço não encontrada")
+
+            work_order.status_payment_id = status_payment_id
+
+            session.commit()
+
+            return "Status de pagamento atualizado com sucesso"
+        except Exception as e:
+            session.rollback()
+            raise e
+        finally:
+            session.close()
+        
 
 
 

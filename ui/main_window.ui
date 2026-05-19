@@ -44,7 +44,14 @@
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="minimumSize">
+    <size>
+     <width>0</width>
+     <height>20</height>
+    </size>
+   </property>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="enabled">
     <bool>true</bool>
@@ -100,6 +107,8 @@
      <string>ORDENS DE SERVIÇO</string>
     </property>
     <addaction name="action_create_work_order"/>
+    <addaction name="actionCADASTRAR_STATUS_ORDEM_DE_SERVI_O"/>
+    <addaction name="actionCADASTRAR_STATUS_DE_PAGAMENTO"/>
    </widget>
    <addaction name="menudashboard"/>
    <addaction name="menuclients"/>
@@ -150,6 +159,16 @@
   <action name="action_create_work_order">
    <property name="text">
     <string>CRIAR O.S</string>
+   </property>
+  </action>
+  <action name="actionCADASTRAR_STATUS_ORDEM_DE_SERVI_O">
+   <property name="text">
+    <string>CADASTRAR STATUS ORDEM DE SERVIÇO</string>
+   </property>
+  </action>
+  <action name="actionCADASTRAR_STATUS_DE_PAGAMENTO">
+   <property name="text">
+    <string>CADASTRAR STATUS DE PAGAMENTO</string>
    </property>
   </action>
  </widget>
