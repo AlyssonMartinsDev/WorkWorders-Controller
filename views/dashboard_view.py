@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
 from services.work_order_service import WorkOrderService
 from utils.formatters import format_currency
 from utils.paths import ui_path
+from views.dialog_WO_options import Dialog_WO_options
 
 
 class DashboardView(QWidget):
@@ -52,9 +53,8 @@ class DashboardView(QWidget):
             "Data",
             "Status Serviço",
             "Valor",
-            "Status Pagamento",
-            "Ações"
-        ])
+            "Status Pagamento"
+                            ])
 
         filtered_orders = []
 
@@ -75,16 +75,16 @@ class DashboardView(QWidget):
                 QStandardItem(str(order.created_at.date())),
                 QStandardItem(str(order.status_service.name)),
                 QStandardItem(format_currency(order.price)),
-                QStandardItem(str(order.status_payment.name)),
-                QStandardItem("")
-            ]
+                QStandardItem(str(order.status_payment.name))            ]
 
             self.apply_status_style(row_items, order)
             model.appendRow(row_items)
 
         table.setModel(model)
+        table.setSelectionBehavior(table.SelectionBehavior.SelectRows)
+        table.setSelectionMode(table.SelectionMode.SingleSelection)
+        table.setEditTriggers(table.EditTrigger.NoEditTriggers)
 
-        self.add_action_buttons(table, filtered_orders)
 
         table.verticalHeader().setVisible(False)
 
@@ -95,118 +95,26 @@ class DashboardView(QWidget):
 
         table.setColumnWidth(9, 180)
 
+        table.doubleClicked.connect(self.on_row_double_clicked)
+
+    def setup_connections(self):
+        # Configura conexões de sinais e slots aqui, se necessário
+        pass
         
-        
+    def on_row_double_clicked(self, index):
+        row = index.row()
 
-    def add_action_buttons(self, table, orders):
-        for row, order in enumerate(orders):
-            container = QWidget()
-            layout = QHBoxLayout(container)
-            layout.setContentsMargins(4, 2, 4, 2)
-            layout.setSpacing(6)
+        model = index.model()
 
-            btn_finish = QPushButton("Finalizar")
-            btn_paid = QPushButton("Pago")
+        order_id = int(model.item(row, 0).text())
+        wo_status_service = model.item(row, 6).text()
+        wo_status_payment = model.item(row, 8).text()
 
-            service_status = order.status_service.name.strip().upper()
-            payment_status = order.status_payment.name.strip().upper()
-
-            btn_finish.setStyleSheet("""
-                QPushButton {
-                    background-color: #1976D2;
-                    color: white;
-                    border: none;
-                    border-radius: 6px;
-                    padding: 6px 12px;
-                    font-weight: bold;
-                }
-
-                QPushButton:hover {
-                    background-color: #1565C0;
-                }
-
-                QPushButton:pressed {
-                    background-color: #0D47A1;
-                }
-
-                QPushButton:disabled {
-                    background-color: #B0BEC5;
-                    color: #ECEFF1;
-                }
-            """)
-
-            btn_paid.setStyleSheet("""
-                QPushButton {
-                    background-color: #2E7D32;
-                    color: white;
-                    border: none;
-                    border-radius: 6px;
-                    padding: 6px 12px;
-                    font-weight: bold;
-                }
-
-                QPushButton:hover {
-                    background-color: #1B5E20;
-                }
-
-                QPushButton:pressed {
-                    background-color: #0D3B12;
-                }
-
-                QPushButton:disabled {
-                    background-color: #B0BEC5;
-                    color: #ECEFF1;
-                }
-            """)
-
-            if service_status == "FINALIZADO":
-                btn_finish.setEnabled(False)
-
-            if payment_status == "PAGO":
-                btn_paid.setEnabled(False)
-
-            btn_finish.clicked.connect(
-                lambda checked=False, order_id=order.id: self.finish_work_order(order_id)
-            )
-
-            btn_paid.clicked.connect(
-                lambda checked=False, order_id=order.id: self.mark_work_order_as_paid(order_id)
-            )
-
-            layout.addWidget(btn_finish)
-            layout.addWidget(btn_paid)
-
-            table.setIndexWidget(
-                table.model().index(row, 9),
-                container
-            )
-
-    def finish_work_order(self, work_order_id):
-        try:
-            res = self.work_order_service.update_status_service(work_order_id, 2)
-
-            QMessageBox.information(self, "Sucesso", res)
-        except Exception as e:
-            QMessageBox.critical(self, "Erro", f"Erro ao finalizar ordem de serviço: {e}")
-        finally:
-            self.reload_tables()
-
-
-        # depois você chama o service:
-        # self.work_order_service.finish_work_order(work_order_id)
+        dialog = Dialog_WO_options(order_id, wo_status_service, wo_status_payment)
+        dialog.work_order_updated.connect(self.reload_tables)
+        dialog.exec_()
 
         
-
-    def mark_work_order_as_paid(self, work_order_id):
-        try:
-            res = self.work_order_service.update_status_payment(work_order_id, 2)
-
-            QMessageBox.information(self, "Sucesso", res)
-        except Exception as e:
-            QMessageBox.critical(self, "Erro", f"Erro ao marcar ordem de serviço como paga: {e}")
-        finally:
-            self.reload_tables()
-
     def reload_tables(self):
         self.load_pending_orders()
         self.load_finished_orders()

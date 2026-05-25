@@ -203,6 +203,8 @@ class CreateWorkOrderView(QWidget):
         self.ui.lineEdit_price.clear()
         self.ui.textEdit.clear()
 
+        
+
 
 
 
