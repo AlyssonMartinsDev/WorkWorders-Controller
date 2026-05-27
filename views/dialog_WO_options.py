@@ -44,7 +44,7 @@ class Dialog_WO_options(QDialog):
     def setup_connections(self):
         self.ui.btn_finish.clicked.connect(self.finish_work_order)
         self.ui.btn_mark_paid.clicked.connect(self.mark_work_order_as_paid)
-
+        self.ui.btn_vinc_access_remote.clicked.connect(self.open_access_remote_dialog)
 
     def finish_work_order(self):
 
@@ -85,3 +85,10 @@ class Dialog_WO_options(QDialog):
             self.work_order_updated.emit()
             self.close()
 
+    def open_access_remote_dialog(self):
+        from views.dialog_create_access_remote import DialogCreateAccessRemote
+
+        dialog = DialogCreateAccessRemote(self.wo_id)
+        dialog.exec_()
+        self.work_order_updated.emit()
+        self.close()

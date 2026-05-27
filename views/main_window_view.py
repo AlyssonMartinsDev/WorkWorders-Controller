@@ -4,7 +4,6 @@ from PySide6.QtUiTools import QUiLoader
 from PySide6.QtCore import QFile, Qt
 from PySide6.QtGui import QStandardItem, QStandardItemModel, QColor
 
-from views.create_window_view import CreateWindow
 from views.create_work_order_view import CreateWorkOrderView
 from views.dashboard_view import DashboardView
 
