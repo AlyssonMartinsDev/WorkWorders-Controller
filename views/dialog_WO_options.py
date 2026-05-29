@@ -45,6 +45,7 @@ class Dialog_WO_options(QDialog):
         self.ui.btn_finish.clicked.connect(self.finish_work_order)
         self.ui.btn_mark_paid.clicked.connect(self.mark_work_order_as_paid)
         self.ui.btn_vinc_access_remote.clicked.connect(self.open_access_remote_dialog)
+        self.ui.btn_delete.clicked.connect(self.delete_work_order)
 
     def finish_work_order(self):
 
@@ -92,3 +93,17 @@ class Dialog_WO_options(QDialog):
         dialog.exec_()
         self.work_order_updated.emit()
         self.close()
+
+    def delete_work_order(self):
+        # Aqui você pode implementar a lógica para deletar a ordem de serviço
+        # e fechar o diálogo após a exclusão
+        
+        try:
+            res = self.work_order_service.delete_work_order_by_id(self.wo_id)
+
+            QMessageBox.information(self, "Sucesso", res)
+        except Exception as e:
+            QMessageBox.critical(self, "Erro", f"Erro ao deletar ordem de serviço: {e}")
+        finally:
+            self.work_order_updated.emit()
+            self.close()

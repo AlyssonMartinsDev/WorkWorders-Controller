@@ -134,6 +134,32 @@ class WorkOrderService:
         finally:
             session.close()
         
+    def delete_work_order_by_id(self, work_order_id, session = None):
+        
+        own_session = session is None
+        if own_session:
+            session = SessionLocal()
+
+        try:
+            work_order = session.query(WorkOrderModel).filter(WorkOrderModel.id == work_order_id).first()
+
+            if not work_order:
+                raise ValueError("Ordem de serviço não encontrada")
+
+            session.delete(work_order)
+
+            if own_session:
+                session.commit()
+
+            return "Ordem de serviço deletada com sucesso"
+        except Exception as e:
+            if own_session:
+                session.rollback()
+            raise e
+        finally:            
+            if own_session:
+                session.close()
+
 
 
 

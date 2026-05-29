@@ -102,9 +102,15 @@ class DashboardView(QWidget):
         pass
         
     def on_row_double_clicked(self, index):
+
+        if not index.isValid():
+            return
+        
+        table = self.sender()
+        model = table.model()
+
         row = index.row()
 
-        model = index.model()
 
         order_id = int(model.item(row, 0).text())
         wo_status_service = model.item(row, 6).text()

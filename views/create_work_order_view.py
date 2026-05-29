@@ -106,6 +106,7 @@ class CreateWorkOrderView(QWidget):
         self.ui.button_clear.setDisabled(False)
 
     def clear_fields(self):
+        self.selected_id = None
 
         self.ui.lineEdit_name.setReadOnly(False)
         self.ui.lineEdit_name.clear()
@@ -194,6 +195,7 @@ class CreateWorkOrderView(QWidget):
 
 
     def clear_all_fields(self):
+        self.selected_id = None
 
         self.clear_fields()
 
@@ -202,6 +204,9 @@ class CreateWorkOrderView(QWidget):
         self.ui.lineEdit_password.clear()
         self.ui.lineEdit_price.clear()
         self.ui.textEdit.clear()
+
+        self.load_combobox_data()
+
 
         
 
