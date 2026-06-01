@@ -1,13 +1,11 @@
-from PySide6.QtCore import QFile, Qt, QTimer
+from PySide6.QtCore import QFile, Qt
 from PySide6.QtGui import QColor, QStandardItem, QStandardItemModel
 from PySide6.QtUiTools import QUiLoader
 from PySide6.QtWidgets import (
     QHeaderView,
-    QMessageBox,
+    QComboBox,
     QWidget,
     QVBoxLayout,
-    QPushButton,
-    QHBoxLayout
 )
 
 from services.work_order_service import WorkOrderService
@@ -23,6 +21,7 @@ class DashboardView(QWidget):
         self.work_order_service = WorkOrderService()
 
         self.load_ui()
+        self.setup_connections()
         self.load_finished_orders()
         self.load_pending_orders()
 
@@ -40,6 +39,10 @@ class DashboardView(QWidget):
         layout.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.ui)
 
+    def setup_connections(self):
+        self.ui.table_pending.doubleClicked.connect(self.on_row_double_clicked)
+        self.ui.table_finished.doubleClicked.connect(self.on_row_double_clicked)
+
     def load_work_orders_by_status(self, table, allowed_status):
         work_orders = self.work_order_service.get_all_work_orders()
 
@@ -54,7 +57,7 @@ class DashboardView(QWidget):
             "Status Serviço",
             "Valor",
             "Status Pagamento"
-                            ])
+        ])
 
         filtered_orders = []
 
@@ -70,57 +73,74 @@ class DashboardView(QWidget):
                 QStandardItem(str(order.id)),
                 QStandardItem(str(order.client.name)),
                 QStandardItem(str(order.client.phone)),
-                QStandardItem(str(order.remote_access.code if order.remote_access else "")),
+                QStandardItem(""),
                 QStandardItem(str(order.description)),
                 QStandardItem(str(order.created_at.date())),
                 QStandardItem(str(order.status_service.name)),
                 QStandardItem(format_currency(order.price)),
-                QStandardItem(str(order.status_payment.name))            ]
+                QStandardItem(str(order.status_payment.name))
+            ]
 
             self.apply_status_style(row_items, order)
             model.appendRow(row_items)
 
         table.setModel(model)
+
+        self.add_remote_access_comboboxes(table, model, filtered_orders)
+
+
         table.setSelectionBehavior(table.SelectionBehavior.SelectRows)
         table.setSelectionMode(table.SelectionMode.SingleSelection)
         table.setEditTriggers(table.EditTrigger.NoEditTriggers)
-
 
         table.verticalHeader().setVisible(False)
 
         header = table.horizontalHeader()
         header.setSectionResizeMode(QHeaderView.ResizeToContents)
         header.setSectionResizeMode(4, QHeaderView.Stretch)
-        header.setSectionResizeMode(9, QHeaderView.Fixed)
 
-        table.setColumnWidth(9, 180)
+    def add_remote_access_comboboxes(self, table, model, orders):
+        for row, order in enumerate(orders):
+            combo = QComboBox()
 
-        table.doubleClicked.connect(self.on_row_double_clicked)
+            if order.remote_accesses:
+                for access in order.remote_accesses:
+                    access_type = access.type or "Acesso"
+                    combo.addItem(
+                        f"{access_type} - {access.code}",
+                        access.id
+                    )
+            else:
+                combo.addItem("Sem acesso remoto", None)
+                combo.setEnabled(False)
 
-    def setup_connections(self):
-        # Configura conexões de sinais e slots aqui, se necessário
-        pass
-        
+            table.setIndexWidget(
+                model.index(row, 3),
+                combo
+            )
+
     def on_row_double_clicked(self, index):
-
         if not index.isValid():
             return
-        
+
         table = self.sender()
         model = table.model()
 
         row = index.row()
 
-
         order_id = int(model.item(row, 0).text())
         wo_status_service = model.item(row, 6).text()
         wo_status_payment = model.item(row, 8).text()
 
-        dialog = Dialog_WO_options(order_id, wo_status_service, wo_status_payment)
-        dialog.work_order_updated.connect(self.reload_tables)
-        dialog.exec_()
+        dialog = Dialog_WO_options(
+            order_id,
+            wo_status_service,
+            wo_status_payment
+        )
 
-        
+        dialog.work_order_updated.connect(self.reload_tables)
+        dialog.exec()
+
     def reload_tables(self):
         self.load_pending_orders()
         self.load_finished_orders()
@@ -148,11 +168,11 @@ class DashboardView(QWidget):
         if status == "FINALIZADO":
             status_item.setForeground(QColor("#4CAF50"))
         elif status == "EM ANDAMENTO":
-            status_item.setForeground(QColor("#03A9F4"))
-        elif status == "ATRASADO":
             status_item.setForeground(QColor("#9E9E9E"))
         elif status == "AGUARDANDO CLIENTE":
             status_item.setForeground(QColor("#FFC107"))
+        elif status == "ATRASADO":
+            status_item.setForeground(QColor("#FF9800"))
         elif status == "REJEITADO":
             status_item.setForeground(QColor("#F44336"))
 

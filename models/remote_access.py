@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, String, DateTime
 from datetime import datetime, UTC
 from sqlalchemy.orm import relationship
 
@@ -13,6 +13,7 @@ class RemoteAccess(Base):
     code = Column(String, nullable=False)
     password = Column(String, nullable=True)
     type = Column(String, nullable=True)
+    work_order_id = Column(Integer, ForeignKey("work_orders.id"), nullable=False)
 
     created_at = Column(
         DateTime(timezone=True),
@@ -24,4 +25,4 @@ class RemoteAccess(Base):
         onupdate=lambda: datetime.now(UTC)
     )
 
-    work_orders = relationship("WorkOrderModel", back_populates="remote_access")
+    work_order = relationship("WorkOrderModel", back_populates="remote_accesses")

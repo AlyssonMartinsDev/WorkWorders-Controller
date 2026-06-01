@@ -1,6 +1,6 @@
 from email_validator import validate_email, EmailNotValidError
 import re
-
+from PySide6.QtGui import QIntValidator
 
 
 class Validators:
@@ -36,3 +36,12 @@ class Validators:
 
         return clean_phone
 
+class FieldValidators:
+    @staticmethod
+    def validate_required(field_name, value):
+        if not value:
+            raise ValueError(f"{field_name} é obrigatório.")
+        
+    @staticmethod
+    def only_numbers(line_edit):
+        line_edit.setValidator(QIntValidator())

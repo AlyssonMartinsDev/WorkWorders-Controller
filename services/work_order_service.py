@@ -18,23 +18,18 @@ class WorkOrderService:
         session = SessionLocal()
 
         try:
-            print(data)
+
             if not data.get("client_id"):
                 client_data = data.get("client_data")
-
-                print(client_data)
 
                 client = self.clients_service.create_client(client_data, session=session)
 
                 data["client_id"] = client.id
 
-            remote_access_id = None
+            
 
 
-            if data.get("access_remote_data"):
-                remote_access_data = data.get("access_remote_data")
-                remote_access = self.access_remote_service.create_access_remote(remote_access_data, session=session)
-                remote_access_id = remote_access.id
+
 
             work_order_data = data.get("order_data")
             if not work_order_data.get("description"):
@@ -51,7 +46,6 @@ class WorkOrderService:
 
             work_order = WorkOrderModel(
                 client_id= data.get("client_id") or client.id,
-                remote_access_id= remote_access_id,
                 description= work_order_data.get("description"),
                 price= work_order_data.get("price"),
                 status_service_id= work_order_data.get("status_service"),
@@ -62,12 +56,16 @@ class WorkOrderService:
             session.add(work_order)
             session.flush()
             session.refresh(work_order)
+
+            if data.get("access_remote_data"):
+                remote_access_data = data.get("access_remote_data")
+                remote_access_data["work_order_id"] = work_order.id
+                self.access_remote_service.create_access_remote(remote_access_data, session=session)
             session.commit()
 
 
             return "Ordem de serviço criada com sucesso"
         except Exception as e:
-            print(f"erro no service de ordens de serviço: {e}")
             session.rollback()
             raise e
         finally:
@@ -82,7 +80,7 @@ class WorkOrderService:
                     joinedload(WorkOrderModel.client),
                     joinedload(WorkOrderModel.status_service),
                     joinedload(WorkOrderModel.status_payment),
-                    joinedload(WorkOrderModel.remote_access)
+                    joinedload(WorkOrderModel.remote_accesses)
                 )\
                 .all()
 

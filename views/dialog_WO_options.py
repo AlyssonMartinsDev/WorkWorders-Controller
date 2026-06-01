@@ -91,6 +91,7 @@ class Dialog_WO_options(QDialog):
 
         dialog = DialogCreateAccessRemote(self.wo_id)
         dialog.exec_()
+            
         self.work_order_updated.emit()
         self.close()
 

@@ -8,6 +8,9 @@ from services.status_payment_service import StatusServiceService
 from services.status_service_service import StatusPaymentService
 from services.work_order_service import WorkOrderService
 from utils.paths import ui_path
+
+
+from utils.validators import FieldValidators
 from views.lookup_window_view import LookupWindowDialog
 
 
@@ -48,6 +51,9 @@ class CreateWorkOrderView(QWidget):
         layout.addWidget(self.ui)
 
         self.ui.button_clear.setDisabled(True)
+
+        FieldValidators.only_numbers(self.ui.lineEdit_price)
+        FieldValidators.only_numbers(self.ui.lineEdit_phone)
 
     def load_combobox_data(self):
         # Status de pagamento
@@ -192,7 +198,6 @@ class CreateWorkOrderView(QWidget):
 
         except Exception as e:
             QMessageBox.critical(self, "Erro", f"{e}")
-
 
     def clear_all_fields(self):
         self.selected_id = None

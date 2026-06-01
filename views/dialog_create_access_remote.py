@@ -1,7 +1,7 @@
 
-from PySide6.QtCore import QFile
-from PySide6.QtUiTools import QUiLoader
-from PySide6.QtWidgets import QDialog, QVBoxLayout, QMessageBox
+from PySide6.QtCore import QFile, Signal 
+from PySide6.QtUiTools import QUiLoader 
+from PySide6.QtWidgets import QDialog, QVBoxLayout, QMessageBox 
 
 from utils.paths import ui_path
 
@@ -11,6 +11,7 @@ from services.access_remote_service import AccessRemoteService
 
 
 class DialogCreateAccessRemote(QDialog):
+    access_remote_created = Signal() # Sinal para indicar que um acesso remoto foi criado
     def __init__(self, wo_id):
         super(DialogCreateAccessRemote, self).__init__()
         self.wo_id = wo_id
@@ -36,7 +37,7 @@ class DialogCreateAccessRemote(QDialog):
         layout.addWidget(self.ui)
 
     def setup_connections(self):
-        pass
+        self.ui.btn_create.clicked.connect(self.create_access_remote)
 
 
     def create_access_remote(self):
@@ -47,14 +48,22 @@ class DialogCreateAccessRemote(QDialog):
         data = {
             "access_type": type,
             "code": code,
-            "password": password
+            "password": password, 
+            "work_order_id": self.wo_id
         }
 
 
         try:
             res = self.access_remote_service.create_access_remote(data)
-            QMessageBox.information(self, "Sucesso", res)
+            
+
+            if res.get("id"):
+                self.access_remote_service.link_access_remote_to_work_order(res.get("id"), self.wo_id)
+
+
+            QMessageBox.information(self, "Sucesso", "Acesso remoto vinculado com sucesso!")
         except Exception as e:
             QMessageBox.critical(self, "Erro", f"Erro ao criar acesso remoto: {e}")
         finally:
+            self.access_remote_created.emit()
             self.close()

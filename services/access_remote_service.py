@@ -14,9 +14,10 @@ class AccessRemoteService:
             code = data.get("code", "").strip()
             access_type = data.get("access_type", "").strip()
             password = data.get("password", "").strip()
+            work_order_id = data.get("work_order_id")
 
             # Primeira regra de negocio: todos os campos são obrigatórios.
-            if not code or not type or not password:
+            if not code or not type or not work_order_id:
                 raise ValueError("Todos os campos do acesso remoto são obrigatórios.")
 
 
@@ -25,7 +26,8 @@ class AccessRemoteService:
             access_remote = RemoteAccess(
                 code=code,
                 password=password,
-                type=access_type
+                type=access_type,
+                work_order_id=work_order_id
             )
 
             # Salvando o acesso remoto no banco de dados
@@ -35,6 +37,43 @@ class AccessRemoteService:
             session.refresh(access_remote)
 
             # Confirmando a transação se foi criada uma sessão própria
+            if own_session:
+                session.commit()
+
+            return {
+                "id": access_remote.id,
+                "code": access_remote.code,
+                "type": access_remote.type,
+                "password": access_remote.password,
+                "work_order_id": access_remote.work_order_id
+            }
+
+        except Exception as e:
+            if own_session:
+                session.rollback()
+
+            raise e
+
+        finally:
+            if own_session:
+                session.close()
+    
+    def link_access_remote_to_work_order(self, access_remote_id, work_order_id, session = None):
+        own_session = session is None
+        session = session or SessionLocal()
+
+        try:
+            access_remote = session.query(RemoteAccess).filter_by(id=access_remote_id).first()
+
+            if not access_remote:
+                raise ValueError("Acesso remoto não encontrado.")
+
+            access_remote.work_order_id = work_order_id
+
+            session.add(access_remote)
+            session.flush()
+            session.refresh(access_remote)
+
             if own_session:
                 session.commit()
 
@@ -49,4 +88,3 @@ class AccessRemoteService:
         finally:
             if own_session:
                 session.close()
-        
